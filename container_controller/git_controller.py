@@ -2,7 +2,7 @@ import os
 import subprocess
 import re
 
-from logger import *
+from container_controller.logger import *
 
 
 CURRENT_PATH = ""

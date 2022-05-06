@@ -9,9 +9,9 @@ import sys
 
 import pdb
 
-from logger import *
-from docker_composer import *
-from git_controller import *
+from container_controller.logger import *
+from container_controller.docker_composer import *
+from container_controller.git_controller import *
 
 CONTAINER_NAMES = [
     # Flask Server
@@ -43,8 +43,8 @@ def validate_version_form(version):
 
 
 CURRENT_PATH = ""
-DOCKER_COMPOSE_PATH = "../../../FlaskServer/"
-DOCKER_COMPOSE_FILE = "docker-compose.yaml"
+# DOCKER_COMPOSE_PATH = "../../../FlaskServer/"
+DOCKER_COMPOSE_PATH = os.path.expanduser('~/FlaskServer/')
 CONTEXT_SETTING = dict(help_option_names=['-h', '--help'])
 
 
@@ -168,6 +168,7 @@ def up():
     docker_composer = DockerComposer()
 
     os.chdir(DOCKER_COMPOSE_PATH)
+    # os.chdir(os.path.expanduser('~/FlaskServer/'))
 
     docker_composer.up()
 

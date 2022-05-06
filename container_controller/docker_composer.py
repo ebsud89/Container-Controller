@@ -2,7 +2,7 @@ from subprocess import PIPE
 import subprocess
 import os
 
-from logger import Logger
+from container_controller.logger import Logger
 
 
 class DockerComposer:
