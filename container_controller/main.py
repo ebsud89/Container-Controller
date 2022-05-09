@@ -51,7 +51,7 @@ CONTEXT_SETTING = dict(help_option_names=['-h', '--help'])
 @ click.group(context_settings=CONTEXT_SETTING)
 def controller():
     """ 
-    Data Team's Docker Container Controller Command (version 1.0.0)
+    Data Team's Docker Container Controller Command (version 1.0.2)
 
         * SUPPORTED CONTAINER
 
@@ -106,9 +106,10 @@ def remove(container_name):
 @ click.command()
 @ click.argument("container_name")
 @ click.option('-v', '--version', is_flag=False, required=True, help="attach TAG's at container is building (X.Y.Z)", default="latest")
-@ click.option('-b', '--branch', is_flag=False, required=False, help="Check out custom branch in repository")
+@ click.option('-b', '--branch', is_flag=False, required=False, help="Check out LOCAL custom branch in repository")
+@ click.option('-r', '--remote', is_flag=False, required=False, help="Check out REMOTE custom branch in repository")
 @ click.option('-f', '--force', is_flag=True, required=False, help="force add tag")
-def build(container_name, version, branch, force):
+def build(container_name, version, branch, remote, force):
     """ BUILD Container Image"""
     logger = Logger()
     docker_composer = DockerComposer()
@@ -145,14 +146,23 @@ def build(container_name, version, branch, force):
                 git_controller.checkout_branch(
                     container_name, custom_branch_name)
                 docker_composer.build(container_name, version)
+            elif remote:
+                custom_branch_name = remote
+                git_controller.checkout_branch(
+                    container_name, custom_branch_name, True)
+                docker_composer.build(container_name, version)
             else:
                 git_controller.checkout_branch(container_name)
                 docker_composer.build(container_name, version)
     else:
-        logger.log("  --- " + container_name +
-                   ":latest IMAGE will be only created \(Not Recommanded\)")
-        git_controller.checkout_branch(container_name)
-        docker_composer.build(container_name, version)
+        if force:
+            logger.log("  --- " + container_name +
+                       ":latest IMAGE will be only created \(Not Recommanded\)")
+            git_controller.checkout_branch(container_name)
+            docker_composer.build(container_name, version, True)
+        else:
+            logger.log("  --- " + container_name +
+                       ":latest IMAGE will be only created \(Not Recommanded\)\n Please use '-f' or '--force' option to build image forcely.")
 
 
 @ click.command()

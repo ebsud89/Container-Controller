@@ -16,7 +16,8 @@ setup(
             # hello라는 명령어를 실행하면
             # hello모듈 main.py에서 main함수를 실행한다는 의미입니다.
             # "hello = hello.main:main"
-            "container_controller = container_controller.main:main"
+            "container_controller = container_controller.main:main",
+            "dcc = container_controller.main:main"
         ]
     },
     classifiers=[

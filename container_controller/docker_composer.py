@@ -47,7 +47,7 @@ class DockerComposer:
                 print(line, end='')
 
         retval = p.returncode
-        self.logger.log(retval)
+        # self.logger.log(retval)
         if retval != 0:
             self.logger.log(
                 f" - Somthing is happend in {command}.\n Please check your command OR repository")
@@ -96,7 +96,10 @@ class DockerComposer:
 
     def build(self, container_name, version, force=False):
 
-        command = ["docker-compose", "build", "--no-cache", container_name]
+        # command = ["docker-compose", "build", "--no-cache",
+        #            '--env-file', '.env', container_name]
+        command = ["docker-compose", "build", "--no-cache",
+                   container_name]
 
         retval = self.__run_command_pipe(command)
 
@@ -109,7 +112,7 @@ class DockerComposer:
                 self.logger.log(" - Build Success # IMAGE NAME = " +
                                 container_name + ":latest' \(ONLY\)")
         else:
-            self.logger.log(" - Build Failed" + container_name)
+            self.logger.log(" - Build Failed : " + container_name)
 
     def up(self, container_name=""):
 
@@ -134,6 +137,6 @@ class DockerComposer:
 
         self.__export_tag("latest")
 
-        command = ["docker-compose", "down", "-v", "-t", "30"]
+        # command = ["docker-compose", "down", "-v", "-t", "30"]
 
-        retval = self.__run_command_pipe(command)
+        # retval = self.__run_command_pipe(command)
