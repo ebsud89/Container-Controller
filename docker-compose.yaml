@@ -1,0 +1,120 @@
+version: '3'
+
+services:
+  proxy-nginx:
+    container_name: proxy-nginx
+    image: nginx:latest
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always
+    volumes:
+      - './proxy:/etc/nginx/conf.d'
+    networks:
+      - data_server
+
+  flask-web-io-prod:
+    container_name: flask-web-io-prod
+    #image: flaskserver_flask-web-io-prod:${TAG}
+    image: flaskserver_flask-web-io-prod:latest
+    build:
+      context: ./FlaskServer-Web-io
+      args:
+        - tag=lastet
+    environment:
+      - FLASK_APP=flask-web-io-prod
+      - FLASK_ENV=production
+    ports:
+      - '5000:5000'
+    networks:
+      - data_server
+
+  flask-web-io-devel:
+    container_name: flask-web-io-devel
+    #image: flaskserver_flask-web-io-devel:${TAG}
+    image: flaskserver_flask-web-io-devel:latest
+    build:
+      context: ./FlaskServer-Web-kr
+    environment:
+      - FLASK_APP=flask-web-io-devel
+      - FLASK_ENV=development
+    ports:
+      - '5050:5000'
+    networks:
+      - data_server
+
+  flask-web-kr-prod:
+    container_name: flask-web-kr-prod
+    #image: flaskserver_flask-web-kr-prod:${TAG}
+    image: flaskserver_flask-web-kr-prod:latest
+    build:
+      context: ./FlaskServer-Web-kr
+    environment:
+      - FLASK_APP=flask-web-kr-prod
+      - FLASK_ENV=production
+    ports:
+      - '5100:5000'
+    networks:
+      - data_server
+
+  flask-web-kr-devel:
+    container_name: flask-web-kr-devel
+    #image: flaskserver_flask-web-kr-devel:${TAG}
+    image: flaskserver_flask-web-kr-devel:latest
+    build:
+      context: ./FlaskServer-Web-kr
+    environment:
+      - FLASK_APP=flask-web-kr-devel
+      - FLASK_ENV=development
+    ports:
+      - '5150:5000'
+    networks:
+      - data_server
+
+  flask-mobile-prod:
+    container_name: flask-mobile-prod
+    #image: flaskserver_flask-mobile-prod:${TAG}
+    image: flaskserver_flask-mobile-prod:latest
+    build:
+      context: ./FlaskServer-Mobile
+    environment:
+      - FLASK_APP=flask-mobile-prod
+      - FLASK_ENV=production
+    ports:
+      - '5200:5000'
+    networks:
+      - data_server
+
+  flask-mobile-devel:
+    container_name: flask-mobile-devel
+    #image: flaskserver_flask-mobile-devel:${TAG}
+    image: flaskserver_flask-mobile-devel:latest
+    build:
+      context: ./FlaskServer-Mobile
+    environment:
+      - FLASK_APP=flask-mobile-devel
+      - FLASK_ENV=development
+    ports:
+      - '5250:5000'
+    networks:
+      - data_server
+
+  mysql:
+    image: mysql:5.7
+    container_name: flask-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "Data321!"
+      MYSQL_DATABASE: "CareViewer_Data"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./flask-mysql:/var/lib/mysql
+    networks:
+      - data_server
+networks:
+  data_server:
+    external:
+      name: data_server
