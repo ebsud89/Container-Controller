@@ -133,6 +133,17 @@ class DockerComposer:
 
         retval = self.__run_command_pipe(command)
 
+    def restart(self, container_name, version):
+
+        self.logger.log("--- NOT IMPLEMENTED ---")
+
+    def reload_nginx(self):
+
+        #command = ['docker', 'exec', 'proxy-nginx', 'nginx -s reload']
+        command = ['docker-compose', 'restart', 'proxy-nginx']
+
+        self.__run_command_pipe(command)
+
     def down(self):
 
         self.__export_tag("latest")

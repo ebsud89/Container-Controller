@@ -51,7 +51,7 @@ CONTEXT_SETTING = dict(help_option_names=['-h', '--help'])
 @ click.group(context_settings=CONTEXT_SETTING)
 def controller():
     """ 
-    Data Team's Docker Container Controller Command (version 1.0.2)
+    Data Team's Docker Container Controller Command (version 1.0.3)
 
         * SUPPORTED CONTAINER
 
@@ -190,7 +190,7 @@ def up():
 @ click.option('-v', '--version', is_flag=False, required=False, help="(NOT IMPLEMENTED) attach TAG's at container is building (X.Y.Z)", default="latest")
 def run(container_name, version):
     """
-    Re-run [$container_name] Container
+    Re-run [$container_name] Container (STOPPED)
 
     \b
     (do this after building container's image)
@@ -206,6 +206,25 @@ def run(container_name, version):
         docker_composer.run(container_name, "latest")
 
     logger.log(" - Run RE-built Container (Not impact UP-TO-DATE container)")
+
+
+@ click.command()
+@ click.argument("container_name")
+def restart(container_name):
+    """
+    Re-Start [$container_name] Container (RUNNING)
+
+    \b
+    (do this after building container's image)
+    """
+    logger = Logger()
+    docker_composer = DockerComposer()
+
+    os.chdir(DOCKER_COMPOSE_PATH)
+
+    if container_name.find("nginx") != -1:
+        docker_composer.reload_nginx()
+        logger.log(" - Run RE-built Container (Not impact UP-TO-DATE container)")
 
 
 @ click.command()
@@ -232,6 +251,7 @@ def main():
     controller.add_command(build)
     controller.add_command(up)
     controller.add_command(run)
+    controller.add_command(restart)
     controller.add_command(down)
     controller()
 
