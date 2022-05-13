@@ -26,8 +26,15 @@ CONTAINER_NAMES = [
     # 'django-mobile-devel'
 
     # Frontend
-
+    'webview-prod',
+    'webview-devel'
 ]
+
+
+BACKEND_DOCKER_COMPOSE_PATH = os.path.expanduser('~/FlaskServer/')
+FRONTND_DOCKER_COMPOSE_PATH = os.path.expanduser('~/DasomM-WebView/')
+
+CONTEXT_SETTING = dict(help_option_names=['-h', '--help'])
 
 
 def validate_container(container_name):
@@ -42,16 +49,19 @@ def validate_version_form(version):
         return False
 
 
-CURRENT_PATH = ""
-# DOCKER_COMPOSE_PATH = "../../../FlaskServer/"
-DOCKER_COMPOSE_PATH = os.path.expanduser('~/FlaskServer/')
-CONTEXT_SETTING = dict(help_option_names=['-h', '--help'])
+def check_docker_compose_path():
+    if os.path.isdir(BACKEND_DOCKER_COMPOSE_PATH):
+        os.chdir(BACKEND_DOCKER_COMPOSE_PATH)
+    elif os.path.isdir(FRONTND_DOCKER_COMPOSE_PATH):
+        os.chdir(FRONTND_DOCKER_COMPOSE_PATH)
+    else:
+        assert()
 
 
 @ click.group(context_settings=CONTEXT_SETTING)
 def controller():
     """ 
-    Data Team's Docker Container Controller Command (version 1.0.3)
+    Data Team's Docker Container Controller Command (version 1.0.4)
 
         * SUPPORTED CONTAINER
 
@@ -63,12 +73,14 @@ def controller():
           - flask-mobile-prod
           - flask-mobile-devel
 
+          - webview-prod
+          - webview-devel
+
         * NOT SUPPORTED
 
     \b
           - proxy-nginx
-          - FRONT-END containers (to support)
-
+          - cache-mysql
     """
     pass
 
@@ -93,7 +105,7 @@ def remove(container_name):
     logger = Logger()
     docker_composer = DockerComposer()
 
-    os.chdir(DOCKER_COMPOSE_PATH)
+    check_docker_compose_path()
 
     if not validate_container(container_name):
         logger.log("  --- " + container_name + " is Not exist in Docker")
@@ -115,7 +127,7 @@ def build(container_name, version, branch, remote, force):
     docker_composer = DockerComposer()
     git_controller = GitController()
 
-    os.chdir(DOCKER_COMPOSE_PATH)
+    check_docker_compose_path()
 
     if not validate_container(container_name):
         logger.log("  --- " + container_name +
@@ -177,8 +189,7 @@ def up():
     logger = Logger()
     docker_composer = DockerComposer()
 
-    os.chdir(DOCKER_COMPOSE_PATH)
-    # os.chdir(os.path.expanduser('~/FlaskServer/'))
+    check_docker_compose_path()
 
     docker_composer.up()
 
@@ -198,7 +209,7 @@ def run(container_name, version):
     logger = Logger()
     docker_composer = DockerComposer()
 
-    os.chdir(DOCKER_COMPOSE_PATH)
+    check_docker_compose_path()
 
     if version:
         docker_composer.run(container_name, version)
@@ -220,7 +231,7 @@ def restart(container_name):
     logger = Logger()
     docker_composer = DockerComposer()
 
-    os.chdir(DOCKER_COMPOSE_PATH)
+    check_docker_compose_path()
 
     if container_name.find("nginx") != -1:
         docker_composer.reload_nginx()
@@ -234,7 +245,7 @@ def down(force):
     logger = Logger()
     docker_composer = DockerComposer()
 
-    os.chdir(DOCKER_COMPOSE_PATH)
+    check_docker_compose_path()
 
     if force:
         logger.log(
@@ -257,5 +268,4 @@ def main():
 
 
 if __name__ == "__main__":
-    CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
     main()
