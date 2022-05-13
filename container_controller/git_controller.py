@@ -4,16 +4,11 @@ import re
 
 from container_controller.logger import *
 
-import pdb
-
-CURRENT_PATH = ""
-GIT_PATH = "../../../FlaskServer/"
-
-
 REPO_DICT = {
     "io": "FlaskServer-Web-io",
     "kr": "FlaskServer-Web-kr",
     "mobile": "FlaskServer-Mobile",
+    "webview": "DasomM-WebView"
 }
 
 BRANCH_DICT = {
@@ -44,6 +39,8 @@ class GitController():
             self.repo_name = REPO_DICT["io"]
         elif container_name.find('mobile') != -1:
             self.repo_name = REPO_DICT["mobile"]
+        elif container_name.find('webview') != -1:
+            self.repo_name = REPO_DICT["webview"]
         else:
             assert()
 
@@ -57,7 +54,7 @@ class GitController():
     def get_all_branches(self, repo_name):
 
         print("get_all_branch\n")
-        os.chdir(GIT_PATH + repo_name)
+        os.chdir(os.path.expanduser('~/'+self.repo_name))
 
         proc = subprocess.Popen(['git', 'branch'], stdout=subprocess.PIPE)
         stdout, _ = proc.communicate()
@@ -72,7 +69,7 @@ class GitController():
         self.__parse_container_name(container_name)
 
         logger.log(f"  --- MOVE PATH {os.getcwd()} / {self.repo_name}")
-        os.chdir(os.getcwd() + "/" + self.repo_name)
+        os.chdir(os.path.expanduser('~/'+self.repo_name))
 
         if custom_branch_name == "":
             logger.log(
