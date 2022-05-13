@@ -2,7 +2,7 @@ from subprocess import PIPE
 import subprocess
 import os
 
-from container_controller.logger import * 
+from container_controller.logger import Logger
 
 
 class DockerComposer:
@@ -69,24 +69,27 @@ class DockerComposer:
 
     def clean(self, container_name, remove_all):
 
-        if remove_all:
-            command = ["docker images", "prune"]
+        # if remove_all:
+        #     command = ["docker images", "prune"]
+        #     self.__run_command_pipe(command)
+        # elif container_name:
+        #     command = ["docker images -q -f dangling=true " + container_name]
+        #     image_ids_byte = self.__run_command_pipe(command)
+        #     image_ids = bytes.decode(image_ids_byte)
+
+        #     if image_ids != "":
+        #         logger.log("No container")
+
+        #     for img_id in image_ids.readlines():
+        #         img_id = img_id.decode("utf-8")
+        #         img_id = img_id.replace("\n", "")
+
+        #         logger.log("Removing container image id " + id)
+        #         # command = ["docker", "rmi", "-f", str(id)]
+        #         # self.run_command(command)
+        if container_name.find('webview') != -1:
+            command = ['docker', 'image', 'prune', '-a', '-f']
             self.__run_command_pipe(command)
-        elif container_name:
-            command = ["docker images -q -f dangling=true " + container_name]
-            image_ids_byte = self.__run_command_pipe(command)
-            image_ids = bytes.decode(image_ids_byte)
-
-            if image_ids != "":
-                logger.log("No container")
-
-            for img_id in image_ids.readlines():
-                img_id = img_id.decode("utf-8")
-                img_id = img_id.replace("\n", "")
-
-                logger.log("Removing container image id " + id)
-                # command = ["docker", "rmi", "-f", str(id)]
-                # self.run_command(command)
 
     def remove(self, contiainer_name):
 

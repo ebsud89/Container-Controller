@@ -61,7 +61,7 @@ def check_docker_compose_path():
 @ click.group(context_settings=CONTEXT_SETTING)
 def controller():
     """ 
-    Data Team's Docker Container Controller Command (version 1.0.4)
+    Data Team's Docker Container Controller Command (version 1.0.5)
 
         * SUPPORTED CONTAINER
 
@@ -93,8 +93,12 @@ def clean(container_name, remove_all):
     logger = Logger()
     docker_composer = DockerComposer()
 
-    logger.log("DOCKER COMPOSE - CLEAN (start)")
-    docker_composer.clean(container_name, remove_all)
+    if os.path.isdir(FRONTND_DOCKER_COMPOSE_PATH):
+        logger.log("DOCKER COMPOSE - CLEAN (start / remove all dangling images)")
+        docker_composer.clean('webview', True)
+    else:
+        logger.log("DOCKER COMPSSE - CLEAN (Not allowed in Flask-Server")
+
     logger.log("DOCKER COMPOSE - CLEAN (end)")
 
 
