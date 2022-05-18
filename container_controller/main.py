@@ -21,9 +21,10 @@ CONTAINER_NAMES = [
     'flask-web-io-devel',
     'flask-mobile-prod',
     'flask-mobile-devel',
-    'proxy-nginx'
+    'proxy-nginx',
     # 'django-mobile-prod',
     # 'django-mobile-devel'
+    'flask-mysql',
 
     # Frontend
     'webview-prod',

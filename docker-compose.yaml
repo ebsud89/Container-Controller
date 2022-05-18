@@ -99,7 +99,7 @@ services:
     networks:
       - data_server
 
-  mysql:
+  flask-mysql:
     image: mysql:5.7
     container_name: flask-mysql
     ports:
