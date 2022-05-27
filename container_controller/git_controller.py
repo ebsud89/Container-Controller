@@ -54,7 +54,7 @@ class GitController():
     def get_all_branches(self, repo_name):
 
         print("get_all_branch\n")
-        os.chdir(os.path.expanduser('~/'+self.repo_name))
+        os.chdir(os.getcwd() + '/' + self.repo_name)
 
         proc = subprocess.Popen(['git', 'branch'], stdout=subprocess.PIPE)
         stdout, _ = proc.communicate()
@@ -69,7 +69,7 @@ class GitController():
         self.__parse_container_name(container_name)
 
         logger.log(f"  --- MOVE PATH {os.getcwd()} / {self.repo_name}")
-        os.chdir(os.path.expanduser('~/'+self.repo_name))
+        os.chdir(os.getcwd() + '/' + self.repo_name)
 
         if custom_branch_name == "":
             logger.log(
