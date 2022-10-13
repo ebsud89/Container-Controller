@@ -28,7 +28,11 @@ CONTAINER_NAMES = [
 
     # Frontend
     'webview-prod',
-    'webview-devel'
+    'webview-devel',
+
+    # Avadin-ON
+    'fastapi-avadin_on-prod',
+    'fastapi-avadin_on-devel'
 ]
 
 

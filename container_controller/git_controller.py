@@ -8,7 +8,8 @@ REPO_DICT = {
     "io": "FlaskServer-Web-io",
     "kr": "FlaskServer-Web-kr",
     "mobile": "FlaskServer-Mobile",
-    "webview": "DasomM-WebView"
+    "webview": "DasomM-WebView",
+    "on": "Avadin-ON-Backend"
 }
 
 BRANCH_DICT = {
@@ -41,6 +42,8 @@ class GitController():
             self.repo_name = REPO_DICT["mobile"]
         elif container_name.find('webview') != -1:
             self.repo_name = REPO_DICT["webview"]
+        elif container_name.find('on') != -1:
+            self.repo_name = REPO_DICT["on"]
         else:
             assert()
 
