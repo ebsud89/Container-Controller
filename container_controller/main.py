@@ -38,6 +38,7 @@ CONTAINER_NAMES = [
 
 BACKEND_DOCKER_COMPOSE_PATH = os.path.expanduser('~/FlaskServer/')
 FRONTND_DOCKER_COMPOSE_PATH = os.path.expanduser('~/DasomM-WebView/')
+AVADIN_ON_DOCKER_COMPOSE_PATH = os.path.expanduser('~/Avadin-ON-backend/')
 
 CONTEXT_SETTING = dict(help_option_names=['-h', '--help'])
 

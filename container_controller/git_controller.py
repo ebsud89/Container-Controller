@@ -52,6 +52,7 @@ class GitController():
         elif re.search(r"devel\b", container_name):
             self.branch_name = BRANCH_DICT["devel"]
         else:
+            b
             assert()
 
     def get_all_branches(self, repo_name):
