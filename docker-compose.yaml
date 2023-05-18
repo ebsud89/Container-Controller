@@ -34,7 +34,7 @@ services:
     #image: flaskserver_flask-web-io-devel:${TAG}
     image: flaskserver_flask-web-io-devel:latest
     build:
-      context: ./FlaskServer-Web-kr
+      context: ./FlaskServer-Web-io
     environment:
       - FLASK_APP=flask-web-io-devel
       - FLASK_ENV=development
@@ -103,7 +103,7 @@ services:
     image: mysql:5.7
     container_name: flask-mysql
     ports:
-      - "3306:3306"
+      - "3386:3306"
     environment:
       MYSQL_ROOT_PASSWORD: "Data321!"
       MYSQL_DATABASE: "CareViewer_Data"
@@ -114,6 +114,74 @@ services:
       - ./flask-mysql:/var/lib/mysql
     networks:
       - data_server
+
+  avadin_on-prod:
+    container_name: fastapi-avadin_on-prod
+    image: flaskserver_fastapi-avadin_on-prod:latest
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    build:
+      context: ./Avadin-ON-backend/demo
+      dockerfile: Dockerfile
+    environment:
+      - FASTAPI_ENV=production
+    ports:
+      - '5300:8000'
+    networks:
+      - data_server
+
+  avadin_on-devel:
+    container_name: fastapi-avadin_on-devel
+    image: flaskserver_fastapi-avadin_on-devel:latest
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    build:
+      context: ./Avadin-ON-backend/demo
+      dockerfile: Dockerfile
+    environment:
+      - FASTAPI_ENV=development
+    ports:
+      - '5350:8000'
+    networks:
+      - data_server
+
+  coin_info:
+    container_name: fastapi-coin_info
+    image: flaskserver_fastapi-coin_info:latest
+    command: uvicorn app:app --reload --host 0.0.0.0 --port 8000
+    build:
+      context: ./Avadin-ON-backend/coin-info
+      dockerfile: Dockerfile
+    environment:
+      - FASTAPI_ENV=development
+    ports:
+      - '5400:8000'
+    networks:
+      - data_server
+
+  push_service:
+    container_name: fastapi-push_service
+    image: flaskserver_fastapi-push_service:latest
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    build:
+      context: ./Avadin-ON-backend/push-service
+      dockerfile: Dockerfile
+    environment:
+      - FASTAPI_ENV=development
+    ports:
+      - '5401:8000'
+    networks:
+      - data_server
+
+  rabbitmq:
+    container_name: rabbitmq
+    build:
+      context: ./Container-Controller/rabbitmq
+      dockerfile: Dockerfile
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - data_server    
+
 networks:
   data_server:
     external:
