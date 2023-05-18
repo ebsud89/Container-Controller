@@ -22,3 +22,12 @@ EXPOSE 5672 15672
 # RUN echo "listeners.tcp.default = 0.0.0.0:5672" >>/etc/rabbitmq/rabbitmq.conf
 # RUN echo "management.listener.port = 15672" >>/etc/rabbitmq/rabbitmq.conf
 # RUN echo "management.listener.ip = 0.0.0.0" >>/etc/rabbitmq/rabbitmq.conf
+
+# # Copy the create_users.sh script to the user's home directory
+# COPY create_users.sh /home/create_users.sh
+# RUN chmod +x /home/create_users.sh
+
+# # Run the create_users.sh script during container startup
+# CMD ["sh", "-c", "/home/create_users.sh && rabbitmq-server"]
+
+# RUN rabbitmqctl add_user avadin 1thefull322
