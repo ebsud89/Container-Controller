@@ -118,7 +118,7 @@ services:
   avadin_on-prod:
     container_name: fastapi-avadin_on-prod
     image: flaskserver_fastapi-avadin_on-prod:latest
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --root-path /on
     build:
       context: ./Avadin-ON-backend/demo
       dockerfile: Dockerfile
@@ -132,7 +132,7 @@ services:
   avadin_on-devel:
     container_name: fastapi-avadin_on-devel
     image: flaskserver_fastapi-avadin_on-devel:latest
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --root-path /on
     build:
       context: ./Avadin-ON-backend/demo
       dockerfile: Dockerfile
