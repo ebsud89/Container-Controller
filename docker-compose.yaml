@@ -180,7 +180,23 @@ services:
       - "5672:5672"
       - "15672:15672"
     networks:
-      - data_server    
+      - data_server
+    
+  redis:
+    container_name: redis
+    build:
+      context: ./Container-Controller/redis
+      dockerfile: Dockerfile
+    ports:
+      - "6379:6379"
+    networks:
+      - data_server
+
+  worker:
+    build: 
+      context: ./Avadin-ON-backend/demo
+      dockerfile: Dockerfile.worker
+
 
 networks:
   data_server:

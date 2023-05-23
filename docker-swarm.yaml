@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  flask-web-io-prod:
+    container_name: flask-web-io-prod
+    image: flaskserver_flask-web-io-prod:latest
+    build:
+      context: ./FlaskServer-Web-io
+      args:
+        - tag=latest
+    environment:
+      - FLASK_APP=flask-web-io-prod
+      - FLASK_ENV=production
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flask-web-io-prod.rule=Host(`api.avadin.co.kr`) && PathPrefix(`/web/`)"
+      - "traefik.http.services.flask-web-io-prod.loadbalancer.server.port=5000"
+    networks:
+      - data_server
+
+  flask-web-io-devel:
+    container_name: flask-web-io-devel
+    image: flaskserver_flask-web-io-devel:latest
+    build:
+      context: ./FlaskServer-Web-io
+    environment:
+      - FLASK_APP=flask-web-io-devel
+      - FLASK_ENV=development
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flask-web-io-devel.rule=Host(`api.avadin.co.kr`) && PathPrefix(`/web/`)"
+      - "traefik.http.services.flask-web-io-devel.loadbalancer.server.port=5000"
+    networks:
+      - data_server
+
+  flask-mysql:
+    image: mysql:5.7
+    container_name: flask-mysql
+    ports:
+      - "3386:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "Data321!"
+      MYSQL_DATABASE: "CareViewer_Data"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./flask-mysql:/var/lib/mysql
+    networks:
+      - data_server
+
+networks:
+  data_server:
+    external: true
